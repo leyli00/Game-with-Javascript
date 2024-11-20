@@ -36,7 +36,7 @@ var foreColor = "#4a3f35"; // light grey
 var lineColor = "#2f2519"; // dark grey
 var lineWidth = 5;
 var offset = -10;
-var yRatio = .4;
+var yRatio = .8;
 var t = 0;
 var speed = 0;
 var playing = true;
@@ -55,7 +55,29 @@ var player = new function(){
     // interface 
     this.startBtn = new Image();
     this.startBtn.src = "start.png";
+    this.leftBtn = new Image();
+    this.leftBtn.src = "left.png";
+    this.rightBtn = new Image();
+    this.rightBtn.src = "right.png";
+    this.fireBtn = new Image();
+    this.fireBtn.src = "fire.png";
 
+    this.drawInterface = function(){
+        if(playing){
+            // interface draw
+            ctx.drawImage(this.leftBtn,20,c.height - 90,70,70);
+            ctx.drawImage(this.rightBtn,110,c.height - 90,70,70);
+            ctx.drawImage(this.fireBtn,c.width-90,c.height - 90,70,70);
+        }else{
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = "32px Impact";
+            ctx.fillStyle = "white";
+            ctx.fillText("OYUN BİTTİ", c.width / 2, c.height / 3);
+            ctx.drawImage(this.startBtn,(c.width / 2) - 25,( c.height / 3) + 50 ,50,50);
+        }
+        
+    }
 
     this.draw = function(){
 
@@ -78,18 +100,9 @@ var player = new function(){
             playing = false;
             this.rSpeed = 5;
             this.x -= speed * 5;
-
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.font = "32px Impact";
-            ctx.fillStyle = "white";
-            ctx.fillText("OYUN BİTTİ", c.width / 2, c.height / 3);
-            ctx.drawImage(this.startBtn,(c.width / 2) - 25,( c.height / 3) + 50 ,50,50);
         }
 
-        
-
-
+        // rotation calc
         var angle = Math.atan2((p2 - offset) - this.y, (this.x  + 5) - this.x);
         if(grnd && playing){
             this.rot -= (this.rot - angle) * 0.5;
@@ -101,6 +114,10 @@ var player = new function(){
         if(this.rot < -Math.PI) this.rot = Math.PI;
 
         this.y += this.ySpeed;
+        // drawing
+        
+
+        // truck draw
         ctx.save();
         ctx.translate(this.x,this.y);
         ctx.rotate(this.rot);
@@ -138,7 +155,9 @@ function draw(){
     ctx.fill();
     ctx.stroke();
 
+    player.drawInterface();
 
+    // animation
     requestAnimationFrame(draw);
 }
 
@@ -148,14 +167,31 @@ draw();
 c.addEventListener("touchstart", handleStart,  {passive: false});
 c.addEventListener("touchend", handleEnd,  {passive: false});
 
+
+// ctx.drawImage(this.leftBtn,20,c.height - 90,70,70);
+// ctx.drawImage(this.rightBtn,110,c.height - 90,70,70);
+// ctx.drawImage(this.fireBtn,c.width-90,c.height - 90,70,70);
+
+
+
+
 function handleStart(evt){
     evt.preventDefault();
     var touches = evt.changedTouches;
     for(let i = 0; i < touches.length; i++){
         var touch = touches[i];
         
-        if(touch.pageX > ((c.width / 2) -25) && touch.pageX < ((c.width / 2) + 25) && touch.pageY > ((c.height / 3) + 50) && touch.pageY < ((c.height / 3) + 100)){
+        if(!playing && touch.pageX > ((c.width / 2) -25) && touch.pageX < ((c.width / 2) + 25) && touch.pageY > ((c.height / 3) + 50) && touch.pageY < ((c.height / 3) + 100)){
             window.location.reload();
+        }
+        if(playing && touch.pageX > 20 && touch.pageX < 90 && touch.pageY > (c.height - 90) && touch.pageY < (c.height + 20)){
+            console.log("left btn");
+        }
+        if(playing && touch.pageX > 110 && touch.pageX < 180 && touch.pageY > (c.height - 90) && touch.pageY < (c.height + 20)){
+            console.log("right btn");
+        }
+        if(playing && touch.pageX > (c.width - 90) && touch.pageX < (c.width - 20) && touch.pageY > (c.height - 90) && touch.pageY < (c.height + 20)){
+            console.log("fire btn");
         }
     }
 }
