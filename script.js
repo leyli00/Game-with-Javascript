@@ -191,7 +191,7 @@ if(mobilmi){
         var touches = evt.changedTouches;
         for(let i = 0; i < touches.length; i++){
             var touch = touches[i];
-            // console.log(touch.pageX + touch.pageY);
+            checkBtnRelise(touch.pageX, touch.pageY);
         }
     }
 
@@ -213,16 +213,32 @@ window.onresize  = function(){
 
 
 function checkBtnPress(x,y){
+    // if(!playing && x > ((c.width / 2) -25) && x < ((c.width / 2) + 25) && y > ((c.height / 3) + 50) && y < ((c.height / 3) + 100)){
+    //     window.location.reload();
+    // }
+    if(playing && x > 20 && x < 90 && y > (c.height - 90) && y < (c.height + 20)){
+        k.ArrowLeft = 1;
+    }
+    if(playing && x > 110 && x < 180 && y > (c.height - 90) && y < (c.height + 20)){
+        k.ArrowRight = 1;
+    }
+    if(playing && x > (c.width - 90) && x < (c.width - 20) && y > (c.height - 90) && y < (c.height + 20)){
+        k.ArrowUp = 1;
+    }
+}
+
+
+function checkBtnRelise(x,y){
     if(!playing && x > ((c.width / 2) -25) && x < ((c.width / 2) + 25) && y > ((c.height / 3) + 50) && y < ((c.height / 3) + 100)){
         window.location.reload();
     }
     if(playing && x > 20 && x < 90 && y > (c.height - 90) && y < (c.height + 20)){
-        console.log("left btn");
+        k.ArrowLeft = 0;
     }
     if(playing && x > 110 && x < 180 && y > (c.height - 90) && y < (c.height + 20)){
-        console.log("right btn");
+        k.ArrowRight = 0;
     }
     if(playing && x > (c.width - 90) && x < (c.width - 20) && y > (c.height - 90) && y < (c.height + 20)){
-        console.log("fire btn");}
+        k.ArrowUp = 0;
+    }
 }
- 
